@@ -23,6 +23,7 @@ import (
 	"io"
 	"io/ioutil"
 	"github.com/s3git/s3git-go"
+	"encoding/json"
 )
 
 //export s3git_init_repository
@@ -177,6 +178,33 @@ func s3git_list(path, hash *C.char) *C.char {
 	}
 
 	return C.CString(strings.Join(response, ","))
+}
+
+//export s3git_list_commits
+func s3git_list_commits(path *C.char) *C.char {
+
+	repo, err := s3git.OpenRepository(C.GoString(path))
+	if err != nil {
+		return C.CString("")
+	}
+
+	list, _ := repo.ListCommits("")
+
+	result := []s3git.Commit{}
+
+	count := 0
+	for l := range list {
+		result = append(result, l)
+
+		count++
+		if count > 1000 {
+			break
+		}
+	}
+
+	b, err := json.Marshal(result)
+
+	return C.CString(string(b))
 }
 
 func main() {}

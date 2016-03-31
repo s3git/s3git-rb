@@ -72,6 +72,19 @@ Dump contents of a repository
 > S3git.list('').each { |hash| puts S3git.get(hash).read } 
 ```
 
+List multiple commits
+---------------------
+
+```rb
+> %w(bundler/setup s3git tmpdir).each { |gem| require gem } 
+> S3git.init_repository Dir.mktmpdir
+> S3git.add 'first file'
+> S3git.commit 'first commit'
+> S3git.add 'second file'
+> S3git.commit 'second commit'
+> S3git.list_commits.each { |c| puts c["Message"] } 
+```
+
 Limitations and Optimizations
 -----------------------------
 

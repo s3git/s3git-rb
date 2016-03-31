@@ -1,4 +1,5 @@
 require 'ffi'
+require 'json'
 require 'tempfile'
 require "s3git/version"
 
@@ -57,6 +58,11 @@ module S3git
     result.split(",")
   end
 
+  def self.list_commits()
+    json = S3gitBinding.s3git_list_commits(@@path)
+    JSON.parse(json)
+  end
+
   module S3gitBinding
     extend FFI::Library
     ffi_lib File.expand_path("../ext/libs3git.so", File.dirname(__FILE__))
@@ -69,5 +75,6 @@ module S3git
     attach_function :s3git_pull, [:string], :int
     attach_function :s3git_get, [:string, :string], :string
     attach_function :s3git_list, [:string, :string], :string
+    attach_function :s3git_list_commits, [:string], :string
   end
 end

@@ -7,6 +7,10 @@ This is the Ruby interface for [s3git](https://github.com/s3git/s3git). Please s
 
 This Ruby Gem is based on the [s3git-go](https://github.com/s3git/s3git-go) package that is invoked via foreign function interface (FFI) as described [here](https://github.com/ffi/ffi).
 
+**DISCLAIMER: This software is still under development (although the storage format/model is stable) -- use at your own peril for now**
+
+**Note that the API is not stable yet, you can expect minor changes/extensions**
+
 Install
 -------
 
@@ -61,11 +65,11 @@ Dump contents of a repository
 ```rb
 > %w(bundler/setup s3git tmpdir open-uri).each { |gem| require gem } 
 > S3git.init_repository Dir.mktmpdir
-> S3git.add "hello s3git"
-> S3git.add "Ruby rocks"
+> S3git.add 'hello s3git'
+> S3git.add 'Ruby rocks'
 > S3git.add open('https://github.com/s3git/s3git/blob/master/README.md')
 > S3git.add open('local-file.txt')
-> S3git.list("").each { |l| puts S3git.get(l) } 
+> S3git.list('').each { |hash| puts S3git.get(hash) } 
 ```
 
 Limitations and Optimizations

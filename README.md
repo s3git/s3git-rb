@@ -70,3 +70,13 @@ Extract data
 > require "s3git"
 > S3git.get "01234567"
 ```
+
+Contributions
+-------------
+
+Contributions are welcome, please submit a pull request for any enhancements.
+
+License
+-------
+
+s3git-rb is released under the Apache License v2.0. You can find the complete text in the file LICENSE.

@@ -1,4 +1,5 @@
 require 'ffi'
+require 'tempfile'
 require "s3git/version"
 
 module S3git
@@ -21,8 +22,16 @@ module S3git
     S3gitBinding.s3git_clone(url, @@path, access, secret)
   end
 
-  def self.add(filename)
-    S3gitBinding.s3git_add(@@path, filename)
+  def self.add(input)
+    stream = input.is_a?(String) ? StringIO.new(input) : input
+
+    # TODO: Use actual stream instead of using temp file
+    Tempfile.open('s3git') do |f|
+      f.binmode
+      f.write stream.read
+      f.close
+      S3gitBinding.s3git_add(@@path, f.path)
+    end
   end
 
   def self.commit(message)

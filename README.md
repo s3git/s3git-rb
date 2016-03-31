@@ -69,7 +69,7 @@ Dump contents of a repository
 > S3git.add 'Ruby rocks'
 > S3git.add open('https://github.com/s3git/s3git/blob/master/README.md')
 > S3git.add open('local-file.txt')
-> S3git.list('').each { |hash| puts S3git.get(hash) } 
+> S3git.list('').each { |hash| puts S3git.get(hash).read } 
 ```
 
 Limitations and Optimizations

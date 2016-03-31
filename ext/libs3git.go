@@ -20,6 +20,7 @@ import (
 	"C"
 	"os"
 	"bytes"
+	"strings"
 	"github.com/s3git/s3git-go"
 )
 
@@ -46,9 +47,17 @@ func s3git_open_repository(path *C.char) int {
 }
 
 //export s3git_clone
-func s3git_clone(url, path *C.char) int {
+func s3git_clone(url, path, accessKey, secretKey *C.char) int {
 
-	_, err := s3git.Clone(C.GoString(url), C.GoString(path))
+	options := []s3git.CloneOptions{}
+	if access := C.GoString(accessKey); access != "" {
+		options = append(options, s3git.CloneOptionSetAccessKey(access))
+	}
+	if secret := C.GoString(secretKey); secret != "" {
+		options = append(options, s3git.CloneOptionSetSecretKey(secret))
+	}
+
+	_, err := s3git.Clone(C.GoString(url), C.GoString(path), options...)
 	if err != nil {
 		return -1
 	}
@@ -123,23 +132,29 @@ func s3git_push(path *C.char) int {
 	return 0
 }
 
-////export s3git_list
-//func s3git_list(path, hash *C.char) *C.char {
-//
-//	repo, err := s3git.OpenRepository(C.GoString(path))
-//	if err != nil {
-//		return C.CString("")
-//	}
-//
-//	list, _ := repo.List(C.GoString(hash))
-//
-//	for l := range list {
-//
-//	}
-//
-//	repo.Push(false, func(total int64) {})
-//
-//	return 0
-//}
+//export s3git_list
+func s3git_list(path, hash *C.char) *C.char {
+
+	repo, err := s3git.OpenRepository(C.GoString(path))
+	if err != nil {
+		return C.CString("")
+	}
+
+	list, _ := repo.List(C.GoString(hash))
+
+	response := []string{}
+
+	count := 0
+	for l := range list {
+		response = append(response, l)
+
+		count++
+		if count > 1000 {
+			break
+		}
+	}
+
+	return C.CString(strings.Join(response, ","))
+}
 
 func main() {}

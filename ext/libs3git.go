@@ -19,8 +19,9 @@ package main
 import (
 	"C"
 	"os"
-	"bytes"
 	"strings"
+	"io"
+	"io/ioutil"
 	"github.com/s3git/s3git-go"
 )
 
@@ -112,22 +113,43 @@ func s3git_get(path, hash *C.char) *C.char {
 		return C.CString("")
 	}
 
-	buf := new(bytes.Buffer)
-	buf.ReadFrom(r)
-	s := buf.String()
+	// TODO: Return stream directly instead of using temp file (and prevent dangling file)
+	tmpfile, err := ioutil.TempFile("", "s3git")
+	if err != nil {
+		return C.CString("")
+	}
 
-	return C.CString(s)
+	io.Copy(tmpfile, r)
+
+	if err := tmpfile.Close(); err != nil {
+		return C.CString("")
+	}
+
+	return C.CString(tmpfile.Name())
 }
 
 //export s3git_push
-func s3git_push(path *C.char) int {
+func s3git_push(path *C.char, hydrate bool) int {
 
 	repo, err := s3git.OpenRepository(C.GoString(path))
 	if err != nil {
 		return -1
 	}
 
-	repo.Push(false, func(total int64) {})
+	repo.Push(hydrate, func(total int64) {})
+
+	return 0
+}
+
+//export s3git_pull
+func s3git_pull(path *C.char) int {
+
+	repo, err := s3git.OpenRepository(C.GoString(path))
+	if err != nil {
+		return -1
+	}
+
+	repo.Pull(func(total int64) {})
 
 	return 0
 }

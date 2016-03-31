@@ -39,11 +39,17 @@ module S3git
   end
 
   def self.get(hash)
-    S3gitBinding.s3git_get(@@path, hash)
+    tempfile = S3gitBinding.s3git_get(@@path, hash)
+    open(tempfile) unless tempfile.empty?
   end
 
-  def self.push()
-    S3gitBinding.s3git_push(@@path)
+  def self.push(options = {})
+    hydrate = options[:hydrate] if options.key? :hydrate
+    S3gitBinding.s3git_push(@@path, hydrate)
+  end
+
+  def self.pull()
+    S3gitBinding.s3git_pull(@@path)
   end
 
   def self.list(hash)
@@ -59,7 +65,8 @@ module S3git
     attach_function :s3git_clone, [:string, :string, :string, :string], :int
     attach_function :s3git_add, [:string, :string], :string
     attach_function :s3git_commit, [:string, :string], :int
-    attach_function :s3git_push, [:string, ], :int
+    attach_function :s3git_push, [:string, :bool], :int
+    attach_function :s3git_pull, [:string], :int
     attach_function :s3git_get, [:string, :string], :string
     attach_function :s3git_list, [:string, :string], :string
   end

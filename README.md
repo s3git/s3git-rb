@@ -29,21 +29,25 @@ Create a repository
 
 ```rb
 $ irb
-> require "s3git"
-> S3git.init_repository "."
+> require 'bundler/setup'
+> require 's3git'
+> S3git.init_repository ."
 > S3git.add "MyVideo.mpg"
 > S3git.commit "My first s3git commit from Ruby"
 > exit
 $ s3git log
+$ s3git ls
 ```
 
 Clone a repository
 ------------------
 
 ```rb
-> require "s3git"
-> S3git.clone "s3://s3git-spoon-knife", ".", {accessKey: "AKIAJYNT4FCBFWDQPERQ", secretKey: "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"}
-> S3git.list "" { |l| puts l } 
+> require 'bundler/setup'
+> require 's3git'
+> require 'tmpdir'
+> S3git.clone "s3://s3git-spoon-knife", Dir.mktmpdir, {access_key: "AKIAJYNT4FCBFWDQPERQ", secret_k_ey: "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"}
+> S3git.list("").each { |hash| puts hash } 
 ```
 
 Make changes and push

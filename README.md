@@ -1,6 +1,8 @@
 s3git-rb
 ========
 
+[![Join the chat at https://gitter.im/s3git/s3git](https://badges.gitter.im/s3git/s3git.svg)](https://gitter.im/s3git/s3git?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This is the Ruby interface for [s3git](https://github.com/s3git/s3git).
 
 It is based on the [s3git-go](https://github.com/s3git/s3git-go) package that is invoked via foreign function interface (FFI) as described [here](https://github.com/ffi/ffi).

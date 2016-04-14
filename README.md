@@ -11,8 +11,8 @@ This Ruby Gem is based on the [s3git-go](https://github.com/s3git/s3git-go) pack
 
 **Note that the API is not stable yet, you can expect minor changes/extensions**
 
-Install
--------
+Installation
+------------
 
 Please make sure you have a working Golang environment installed, otherwise the s3git Gem will not compile (ie. `go build -buildmode=c-shared -o libs3git.so libs3git.go` as in the `\ext` subdir). See [install golang](https://github.com/minio/minio/blob/master/INSTALLGO.md) for setting up a working Golang environment.
 

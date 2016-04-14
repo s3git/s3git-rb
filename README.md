@@ -16,6 +16,8 @@ Installation
 
 Please make sure you have a working Golang environment installed, otherwise the s3git Gem will not compile (ie. `go build -buildmode=c-shared -o libs3git.so libs3git.go` as in the `\ext` subdir). See [install golang](https://github.com/minio/minio/blob/master/INSTALLGO.md) for setting up a working Golang environment.
 
+Also the [s3git-go](https://github.com/s3git/s3git-go) package needs to be available locally (`go get -d github.com/s3git/s3git-go`).
+
 Assuming you have rails installed, do as follows:
 
 ```sh

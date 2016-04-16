@@ -63,6 +63,14 @@ module S3git
     JSON.parse(json)
   end
 
+  def self.remote_add(name, resource, options = {})
+    access = options[:access_key] if options.key? :access_key
+    secret = options[:secret_key] if options.key? :secret_key
+    endpoint = options[:end_point] if options.key? :end_point
+    S3gitBinding.s3git_remote_add(@@path, name, resource, access, secret, endpoint)
+  end
+
+
   module S3gitBinding
     extend FFI::Library
     ffi_lib File.expand_path("../ext/libs3git.so", File.dirname(__FILE__))
@@ -76,5 +84,6 @@ module S3git
     attach_function :s3git_get, [:string, :string], :string
     attach_function :s3git_list, [:string, :string], :string
     attach_function :s3git_list_commits, [:string], :string
+    attach_function :s3git_remote_add, [:string, :string, :string, :string, :string, :string], :int
   end
 end

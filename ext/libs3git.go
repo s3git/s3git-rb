@@ -245,4 +245,22 @@ func s3git_snapshot_create(path, message *C.char) int {
 	return 0
 }
 
+//export s3git_snapshot_list
+func s3git_snapshot_list(path, commit *C.char) int {
+
+	repo, err := s3git.OpenRepository(C.GoString(path))
+	if err != nil {
+		return -1
+	}
+
+	options := []s3git.SnapshotListOptions{}
+
+	err = repo.SnapshotList(C.GoString(commit), options...)
+	if err != nil {
+		return -1
+	}
+
+	return 0
+}
+
 func main() {}

@@ -74,6 +74,10 @@ module S3git
     S3gitBinding.s3git_snapshot_create(@@path, message)
   end
 
+  def self.snapshot_list(commit)
+    S3gitBinding.s3git_snapshot_list(@@path, commit)
+  end
+
   module S3gitBinding
     extend FFI::Library
     ffi_lib File.expand_path("../ext/libs3git.so", File.dirname(__FILE__))
@@ -89,5 +93,6 @@ module S3git
     attach_function :s3git_list_commits, [:string], :string
     attach_function :s3git_remote_add, [:string, :string, :string, :string, :string, :string], :int
     attach_function :s3git_snapshot_create, [:string, :string], :int
+    attach_function :s3git_snapshot_list, [:string, :string], :int
   end
 end

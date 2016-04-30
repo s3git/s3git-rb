@@ -87,6 +87,18 @@ List multiple commits
 > S3git.list_commits.each { |c| puts c["Message"] } 
 ```
 
+Create a snapshot
+-----------------
+
+```rb
+> %w(bundler/setup s3git tmpdir).each { |gem| require gem }
+> dir = Dir.mktmpdir
+> S3git.init_repository dir
+> File.open(dir + '/file.txt', 'w') { |file| file.write("my snapshot") }
+> S3git.snapshot_create 'Initial snapshot'
+> S3git.snapshot_list ''
+```
+
 Limitations and Optimizations
 -----------------------------
 

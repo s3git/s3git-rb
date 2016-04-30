@@ -18,12 +18,13 @@ package main
 
 import (
 	"C"
-	"os"
-	"strings"
+	"encoding/json"
 	"io"
 	"io/ioutil"
+	"os"
+	"strings"
+
 	"github.com/s3git/s3git-go"
-	"encoding/json"
 )
 
 //export s3git_init_repository
@@ -221,6 +222,22 @@ func s3git_remote_add(path, name, resource, accessKey, secretKey, endpoint *C.ch
 	}
 
 	err = repo.RemoteAdd(C.GoString(name), C.GoString(resource), C.GoString(accessKey), C.GoString(secretKey), options...)
+	if err != nil {
+		return -1
+	}
+
+	return 0
+}
+
+//export s3git_snapshot_create
+func s3git_snapshot_create(path, message *C.char) int {
+
+	repo, err := s3git.OpenRepository(C.GoString(path))
+	if err != nil {
+		return -1
+	}
+
+	_, _, err = repo.SnapshotCreate(C.GoString(path), C.GoString(message))
 	if err != nil {
 		return -1
 	}

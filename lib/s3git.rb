@@ -70,6 +70,9 @@ module S3git
     S3gitBinding.s3git_remote_add(@@path, name, resource, access, secret, endpoint)
   end
 
+  def self.snapshot_create(message)
+    S3gitBinding.s3git_snapshot_create(@@path, message)
+  end
 
   module S3gitBinding
     extend FFI::Library
@@ -85,5 +88,6 @@ module S3git
     attach_function :s3git_list, [:string, :string], :string
     attach_function :s3git_list_commits, [:string], :string
     attach_function :s3git_remote_add, [:string, :string, :string, :string, :string, :string], :int
+    attach_function :s3git_snapshot_create, [:string, :string], :int
   end
 end
